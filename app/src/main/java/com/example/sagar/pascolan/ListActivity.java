@@ -13,6 +13,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ProgressBar;
@@ -84,6 +86,44 @@ public class ListActivity extends AppCompatActivity implements ProfileRecyclerAd
         return answer;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.sort)
+        {
+            Toast.makeText(this, "Menu", Toast.LENGTH_SHORT).show();
+            fetchSortedProfiles();
+            profileRecyclerAdapter.notifyDataSetChanged();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void fetchSortedProfiles()
+    {
+        Toast.makeText(this, "Reached", Toast.LENGTH_SHORT).show();
+        sortedProfiles.clear();
+        for(int y=6;y>=0;y--)
+        {
+            if(Profiles.size()==0)
+            {
+                return;
+            }
+            for (int x = 0; x < Profiles.size(); x++)
+            {
+                if(Profiles.get(x).getPriority().equals(y + ""))
+                {
+                    sortedProfiles.add(Profiles.get(x));
+                }
+            }
+        }
+        profileRecyclerAdapter.notifyDataSetChanged();
+        layoutManager=(LinearLayoutManager)recyclerView.getLayoutManager();
+    }
 
     private void fetchProfiles()
     {
@@ -94,22 +134,8 @@ public class ListActivity extends AppCompatActivity implements ProfileRecyclerAd
                 UserResponse profiles=response.body();
                 progressBar.setVisibility(View.GONE);
                 if(profiles!=null) {
-                    Profiles.clear();
                     Profiles.addAll(profiles.getSampleUsers());
-                    for(int y=6;y>=0;y--)
-                    {
-                        if(Profiles.size()==0)
-                        {
-                            return;
-                        }
-                        for (int x = 0; x < Profiles.size(); x++)
-                        {
-                            if(Profiles.get(x).getPriority().equals(y + ""))
-                            {
-                                sortedProfiles.add(Profiles.get(x));
-                            }
-                        }
-                    }
+                    sortedProfiles.addAll(profiles.getSampleUsers());
                     profileRecyclerAdapter.notifyDataSetChanged();
                     layoutManager=(LinearLayoutManager)recyclerView.getLayoutManager();
                 }
