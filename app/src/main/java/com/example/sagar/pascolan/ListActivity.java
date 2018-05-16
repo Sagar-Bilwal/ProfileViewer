@@ -37,8 +37,6 @@ public class ListActivity extends AppCompatActivity implements ProfileRecyclerAd
     ProfileRecyclerAdapter profileRecyclerAdapter;
     ArrayList<Profile> Profiles=new ArrayList<>();
     ArrayList<Profile> sortedProfiles=new ArrayList<>();
-    Boolean isScrolling=false;
-    int currentItems,totalItems,scrollOutItems;
     LinearLayoutManager layoutManager;
     int pageNo=0;
     @Override
@@ -96,7 +94,7 @@ public class ListActivity extends AppCompatActivity implements ProfileRecyclerAd
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId()==R.id.sort)
         {
-            Toast.makeText(this, "Menu", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "List is Sorted", Toast.LENGTH_SHORT).show();
             fetchSortedProfiles();
             profileRecyclerAdapter.notifyDataSetChanged();
         }
@@ -105,7 +103,6 @@ public class ListActivity extends AppCompatActivity implements ProfileRecyclerAd
 
     private void fetchSortedProfiles()
     {
-        Toast.makeText(this, "Reached", Toast.LENGTH_SHORT).show();
         sortedProfiles.clear();
         for(int y=6;y>=0;y--)
         {
